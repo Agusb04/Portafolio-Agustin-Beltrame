@@ -1,16 +1,12 @@
 import Image from "next/image";
 import { Download, MapPin } from "lucide-react";
-import { EmailCopyButton } from "@/components/EmailCopyButton";
-import { getSocialIcon } from "@/components/social-icons";
-import { resolveEmailAddress } from "@/lib/contact";
-import type { Profile, SocialLink } from "@/types/portfolio";
+import type { Profile } from "@/types/portfolio";
 
 export interface HeroSectionProps {
   profile: Profile;
-  socialLinks: SocialLink[];
 }
 
-export function HeroSection({ profile, socialLinks }: HeroSectionProps) {
+export function HeroSection({ profile }: HeroSectionProps) {
   const {
     name,
     role,
@@ -23,8 +19,6 @@ export function HeroSection({ profile, socialLinks }: HeroSectionProps) {
     languages,
     coreTechnologies,
   } = profile;
-  const emailAddress = resolveEmailAddress(socialLinks);
-  const socialLinksOnly = socialLinks.filter((link) => !link.isEmail);
 
   return (
     <section
@@ -103,27 +97,6 @@ export function HeroSection({ profile, socialLinks }: HeroSectionProps) {
             Contact Me
           </a>
         </div>
-
-        <EmailCopyButton emailAddress={emailAddress} />
-
-        <nav aria-label="Social profiles" className="flex items-center gap-3">
-          {socialLinksOnly.map((link) => {
-            const Icon = getSocialIcon(link.icon);
-            return (
-              <a
-                key={link.id}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:border-primary hover:text-primary"
-              >
-                <Icon aria-hidden="true" className="h-5 w-5" />
-                <span className="sr-only">{link.platform}</span>
-              </a>
-            );
-          })}
-        </nav>
       </div>
 
       <div className="relative mx-auto shrink-0 md:mx-0">

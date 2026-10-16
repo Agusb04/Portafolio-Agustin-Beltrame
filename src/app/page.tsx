@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <main className="flex-1">
-        <HeroSection profile={profile} socialLinks={socialLinks} />
+        <HeroSection profile={profile} />
         <ProjectsGrid projects={projects} />
         <ContactSection
           socialLinks={socialLinks}
