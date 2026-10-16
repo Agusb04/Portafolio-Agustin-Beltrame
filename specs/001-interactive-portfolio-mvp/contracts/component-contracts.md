@@ -14,7 +14,7 @@ La interfaz se divide en componentes modulares que consumen la capa de datos tip
 AppLayout
 ├── Header (Navbar + ThemeToggle)
 ├── Main
-│   ├── HeroSection (Profile presentation + CV CTA + Quick Links)
+│   ├── HeroSection (Profile presentation + CV CTA)
 │   ├── ProjectsSection (ProjectsGrid -> ProjectCard[])
 │   └── ContactSection (SocialBar + EmailCopyButton)
 └── Footer (Copyright + Version)
@@ -46,13 +46,15 @@ AppLayout
 - **Propósito**: Presentar la identidad, rol, síntesis de valor y llamados a la acción (CTA) prioritarios para evaluadores y reclutadores (US-1).
 - **Props**:
   ```typescript
-  import { Profile, SocialLink } from './portfolio-schema';
+  import { Profile } from './portfolio-schema';
 
   export interface HeroSectionProps {
     profile: Profile;
-    socialLinks: SocialLink[];
   }
   ```
+  > Nota: los canales de contacto (correo copiable y redes sociales) NO se
+  > renderizan en el Hero para evitar duplicación — residen únicamente en
+  > `ContactSection` (#contact), alcanzable con un clic desde el CTA "Contact Me".
 - **Elementos Clave**:
   - Título principal (`<h1>`) con el nombre del profesional.
   - Subtítulo destacado con rol y propuesta de valor (`headline`).

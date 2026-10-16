@@ -1,0 +1,104 @@
+import { describe, expect, it } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { HeroSection } from "@/components/HeroSection";
+import type { Profile } from "@/types/portfolio";
+
+const profile: Profile = {
+  name: "Agustín Beltrame",
+  role: "Computer Engineering Student / Software Developer",
+  headline: "Computer Engineering Student at UBA (FIUBA) | Backend Development",
+  bio: "Computer Engineering student at UBA interested in software engineering.",
+  location: "Buenos Aires, Argentina",
+  avatarUrl: "/avatar.webp",
+  cvUrl: "/cv.pdf",
+  availableForWork: true,
+  languages: ["Spanish (Native)", "English (B2)"],
+  coreTechnologies: ["C++", "Go", "TypeScript"],
+};
+
+describe("HeroSection", () => {
+  it("renders the developer name as the main heading", () => {
+    render(<HeroSection profile={profile} />);
+    expect(
+      screen.getByRole("heading", { level: 1, name: profile.name }),
+    ).toBeInTheDocument();
+  });
+
+  it("renders role, headline and availability badge", () => {
+    render(<HeroSection profile={profile} />);
+    expect(screen.getByText(profile.role)).toBeInTheDocument();
+    expect(screen.getByText(profile.headline)).toBeInTheDocument();
+    expect(screen.getByText("Available for work")).toBeInTheDocument();
+  });
+
+  it("links the CV call to action to profile.cvUrl in a new secure tab", () => {
+    render(<HeroSection profile={profile} />);
+    const cvLink = screen.getByRole("link", {
+      name: new RegExp(`Download ${profile.name}'s resume as PDF`, "i"),
+    });
+    expect(cvLink).toHaveAttribute("href", profile.cvUrl);
+    expect(cvLink).toHaveAttribute("target", "_blank");
+    expect(cvLink).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("links the contact call to action to the #contact section", () => {
+    render(<HeroSection profile={profile} />);
+    expect(
+      screen.getByRole("link", { name: "Contact Me" }),
+    ).toHaveAttribute("href", "#contact");
+  });
+
+  it("renders the avatar with a descriptive alt text", () => {
+    render(<HeroSection profile={profile} />);
+    expect(
+      screen.getByRole("img", { name: `Portrait of ${profile.name}` }),
+    ).toBeInTheDocument();
+  });
+
+  it("does not duplicate contact channels that live in #contact", () => {
+    render(<HeroSection profile={profile} />);
+
+    expect(
+      screen.queryByRole("button", {
+        name: "Copy email address to clipboard",
+      }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: /GitHub profile/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: /LinkedIn/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("hides the availability badge when the developer is unavailable", () => {
+    render(<HeroSection profile={{ ...profile, availableForWork: false }} />);
+    expect(screen.queryByText("Available for work")).not.toBeInTheDocument();
+  });
+
+  it("renders languages and core technologies when provided", () => {
+    render(<HeroSection profile={profile} />);
+
+    const languagesLabel = screen.getByText("Languages:");
+    expect(languagesLabel.parentElement).toHaveTextContent(
+      "Spanish (Native) · English (B2)",
+    );
+
+    const techList = screen.getByLabelText("Core technologies");
+    expect(techList).toHaveTextContent("C++");
+    expect(techList).toHaveTextContent("Go");
+    expect(techList).toHaveTextContent("TypeScript");
+  });
+
+  it("omits languages and technology chips when the fields are absent", () => {
+    const minimal: Profile = { ...profile };
+    delete minimal.languages;
+    delete minimal.coreTechnologies;
+    render(<HeroSection profile={minimal} />);
+
+    expect(screen.queryByText(/Languages:/)).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText("Core technologies"),
+    ).not.toBeInTheDocument();
+  });
+});

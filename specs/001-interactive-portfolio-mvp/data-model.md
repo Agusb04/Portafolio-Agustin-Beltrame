@@ -24,6 +24,8 @@ Representa la identidad principal del desarrollador y la información que se exp
 | `avatarUrl` | `string` | Sí | Ruta al archivo de imagen de perfil | Ruta relativa dentro de `/public` o URL HTTPS válida |
 | `cvUrl` | `string` | Sí | Ruta al documento PDF del currículum | Ruta relativa `/cv.pdf` o URL HTTPS válida |
 | `availableForWork` | `boolean` | Sí | Indicador de disponibilidad para nuevas oportunidades | Valor booleano para badge de estado activo |
+| `languages` | `string[]` | No | Idiomas con nivel de dominio | Array opcional de etiquetas en inglés (ej. "Spanish (Native)") |
+| `coreTechnologies` | `string[]` | No | Stack tecnológico principal del desarrollador | Array opcional de 1 a 12 etiquetas técnicas |
 
 ---
 
@@ -40,6 +42,7 @@ Representa cada trabajo expuesto en la galería curada de proyectos destacados.
 | `tags` | `string[]` | Sí | Lista de tecnologías, lenguajes o herramientas | Array no vacío, 2 a 8 etiquetas técnicas |
 | `repoUrl` | `string` | No | URL pública del repositorio de código en GitHub | URL HTTPS válida si está presente |
 | `demoUrl` | `string` | No | URL pública de la aplicación o demo en vivo | URL HTTPS válida si está presente |
+| `extraLinks` | `ProjectLink[]` | No | Enlaces adicionales (ej. segundo repositorio de un proyecto multi-repo) | Array opcional; cada item: `label` (string no vacío), `url` (HTTPS válido), `icon` opcional (`Github` \| `ExternalLink`) |
 | `featured` | `boolean` | Sí | Marca de inclusión en la selección de portada | Debe ser `true` para los 3 a 6 proyectos del MVP |
 | `order` | `number` | Sí | Orden numérico de visualización | Entero positivo para ordenar el grid |
 
