@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Download, MapPin } from "lucide-react";
+import { asset } from "@/lib/assets";
 import type { Profile } from "@/types/portfolio";
 
 export interface HeroSectionProps {
@@ -81,7 +82,7 @@ export function HeroSection({ profile }: HeroSectionProps) {
 
         <div className="flex flex-wrap items-center gap-3">
           <a
-            href={cvUrl}
+            href={asset(cvUrl)}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Download ${name}'s resume as PDF`}
@@ -101,7 +102,7 @@ export function HeroSection({ profile }: HeroSectionProps) {
 
       <div className="relative mx-auto shrink-0 md:mx-0">
         <Image
-          src={avatarUrl}
+          src={asset(avatarUrl)}
           alt={`Portrait of ${name}`}
           width={224}
           height={224}
