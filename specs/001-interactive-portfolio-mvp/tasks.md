@@ -1,113 +1,134 @@
 # Tasks: Portafolio Personal Interactivo MVP
 
 **Input**: Design documents from `/specs/001-interactive-portfolio-mvp/`
-- **Plan**: [plan.md](file:///home/ruso/Escritorio/Proyectos/Portafolio-Agustin-Beltrame/specs/001-interactive-portfolio-mvp/plan.md)
-- **Spec**: [spec.md](file:///home/ruso/Escritorio/Proyectos/Portafolio-Agustin-Beltrame/specs/001-interactive-portfolio-mvp/spec.md)
-- **Data Model**: [data-model.md](file:///home/ruso/Escritorio/Proyectos/Portafolio-Agustin-Beltrame/specs/001-interactive-portfolio-mvp/data-model.md)
-- **Contracts**: [contracts/portfolio-schema.ts](file:///home/ruso/Escritorio/Proyectos/Portafolio-Agustin-Beltrame/specs/001-interactive-portfolio-mvp/contracts/portfolio-schema.ts), [contracts/component-contracts.md](file:///home/ruso/Escritorio/Proyectos/Portafolio-Agustin-Beltrame/specs/001-interactive-portfolio-mvp/contracts/component-contracts.md)
-- **Research**: [research.md](file:///home/ruso/Escritorio/Proyectos/Portafolio-Agustin-Beltrame/specs/001-interactive-portfolio-mvp/research.md)
-- **Quickstart**: [quickstart.md](file:///home/ruso/Escritorio/Proyectos/Portafolio-Agustin-Beltrame/specs/001-interactive-portfolio-mvp/quickstart.md)
 
-**Constitution Principles Alignment**:
-- **I. Estética Developer-First y Pulido Visual (UI/UX)**: Dark mode sin FOUC, transiciones suaves de 60 fps.
-- **II. Separación Estricta de Contenido y Presentación**: Contenido 100% tipado en `src/data/portfolioData.ts`, cero textos hardcodeados.
-- **III. Tipado Estricto y Modularidad de Componentes**: TypeScript `strict: true`, componentes atómicos en `src/components/`.
-- **IV. Mobile-First, Rendimiento y Accesibilidad**: WCAG 2.1 AA, marcado semántico, soporte de teclado integral.
-- **V. SEO, Metadatos y Presencia Profesional Transparente**: Metadatos OpenGraph/Twitter Cards, `target="_blank"` con `rel="noopener noreferrer"`.
+**Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/, quickstart.md
+
+**Tests**: Included — plan.md (`Technical Context → Testing`) explicitly requiere React Testing Library / Vitest además de `tsc --noEmit` y ESLint.
+
+**Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
+
+## Format: `[ID] [P?] [Story] Description`
+
+- **[P]**: Can run in parallel (different files, no dependencies)
+- **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
+- Include exact file paths in descriptions
+
+## Path Conventions
+
+- **Single project**: `src/`, `tests/` at repository root (Next.js App Router con `output: 'export'`)
 
 ---
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Inicialización del proyecto Next.js con TypeScript, Tailwind CSS y configuración de compilación estática.
+**Purpose**: Inicialización del proyecto Next.js con TypeScript estricto, Tailwind, ESLint y tooling de testing según plan.md
 
-- [ ] T001 Initialize Next.js project configuration with TypeScript and static export (`output: 'export'`) in package.json and next.config.ts
-- [ ] T002 Configure TypeScript strict mode and path alias mapping (`@/*`) in tsconfig.json
-- [ ] T003 [P] Configure Tailwind CSS and PostCSS for class-based dark mode (`darkMode: 'class'`) in tailwind.config.ts and postcss.config.mjs
-- [ ] T004 [P] Configure base Tailwind directives, CSS variables, and smooth-scroll behavior in src/app/globals.css
-- [ ] T005 [P] Add base static placeholder assets for favicon and OpenGraph preview in public/favicon.ico and public/og-image.png
-- [ ] T006 Verify initial project setup and compilation with npm run build in package.json
+- [X] T001 Initialize Next.js (App Router) project scaffold in repository root: `package.json`, `next.config.ts` (con `output: 'export'`), `tsconfig.json` (`strict: true`), `next-env.d.ts`, dependencias `next`, `react`, `react-dom`, `next-themes`, `lucide-react` según plan.md
+- [X] T002 [P] Configure Tailwind CSS in `src/app/globals.css` + `tailwind.config.ts` (`darkMode: 'class'`) con tokens de paleta, tipografía y radios de borde developer-first (Constitución I/III)
+- [X] T003 [P] Configure ESLint flat config in `eslint.config.*` + npm scripts in `package.json`: `typecheck` (`tsc --noEmit`), `lint`, `build`, `test` (debe satisfacer `.github/workflows/ci.yml`)
+- [X] T004 [P] Configure Vitest + React Testing Library in `vitest.config.ts` and `tests/setup.ts` (jsdom, matchers de `@testing-library/jest-dom`)
+- [X] T005 [P] Verify `.gitignore` contains Node/Next.js critical patterns (`node_modules/`, `.next/`, `out/`, `dist/`, `build/`, `*.log`, `.env*`) in `.gitignore`
+
+**Checkpoint**: Toolchain instalada; `npm run typecheck`, `npm run lint` y `npm run build` ejecutan (aún sin contenido)
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Infraestructura central de contratos de datos, datasets tipados y shell de layout que DEBE estar completa antes de implementar cualquier Historia de Usuario.
+**Purpose**: Capa de datos tipada y layout raíz — prerequisito bloqueante de TODAS las user stories
 
-**⚠️ CRITICAL**: No user story work can begin until this phase is complete.
+**⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T007 [P] Define TypeScript domain contracts for Profile (name [2-100 chars], role, headline [1-2 sentences], bio [50-300 chars], location, avatarUrl, cvUrl, availableForWork [boolean]), Project (id [slug], title [3-80 chars], description [20-200 chars], keyFeatures [2-4 items], tags [2-8 items], repoUrl [optional HTTPS], demoUrl [optional HTTPS], featured [boolean], order [positive integer]), SocialLink (id, platform, url, label, isEmail, emailAddress, icon), SiteMeta, and PortfolioData in src/types/portfolio.ts
-- [ ] T008 [P] Create ThemeProvider client component wrapper using next-themes (`attribute="class"`, `defaultTheme="system"`, `enableSystem`) in src/providers/ThemeProvider.tsx
-- [ ] T009 Create single source of truth portfolio dataset in English with 3-6 curated projects, developer profile, and social links in src/data/portfolioData.ts
-- [ ] T010 Create root layout with typography, SEO metadata, OpenGraph, Twitter Cards, and ThemeProvider wrapper in src/app/layout.tsx
-- [ ] T011 Initialize base page shell importing portfolio data and setting up semantic layout structure (`<main>`) in src/app/page.tsx
-- [ ] T012 Verify foundational contracts and data integrity with npx tsc --noEmit in tsconfig.json
+- [X] T006 Create type contracts in `src/types/portfolio.ts`: interfaces `Profile`, `Project`, `SocialLink`, `SiteMeta`, `PortfolioData` idénticas a `contracts/portfolio-schema.ts` (campos requeridos/opcionales exactos: `repoUrl?`, `demoUrl?`, `isEmail?`, `emailAddress?`)
+- [X] T007 Create data source in `src/data/portfolioData.ts`: objeto `PortfolioData` (profile, projects, socialLinks, meta) con contenido REAL proporcionado por el usuario — reglas de data-model.md: 3-6 proyectos `featured: true`, `keyFeatures` 2-4 viñetas, `tags` 2-8, al menos uno de `repoUrl`/`demoUrl` presente, todo el contenido en inglés (FR-015)
+- [X] T008 [P] Create `ThemeProvider` wrapper in `src/providers/ThemeProvider.tsx` using `next-themes` con `attribute="class"`, `defaultTheme="system"`, `enableSystem`, `storageKey="portfolio-theme"` (FR-010, SC-006 sin FOUC)
+- [X] T009 Create root layout in `src/app/layout.tsx`: `ThemeProvider` wrapper, metadatos SEO tipados (`Metadata`) con OpenGraph y Twitter Cards derivados de `portfolioData.meta` (Constitución V, FR-015 `lang="en"`)
+- [X] T010 Create page skeleton in `src/app/page.tsx` ensamblando secciones semánticas (`<main>`, `<section id="about">`, `<section id="projects">`, `<section id="contact">`) consumiendo `portfolioData` de forma declarativa (Constitución II)
+- [ ] T011 [P] Add static assets in `public/`: `cv.pdf` (CV real del usuario), `avatar.webp` (imagen de perfil optimizada), `og-image.png` (preview social) — rutas referenciadas por `profile.cvUrl`, `profile.avatarUrl`, `meta.ogImage`
 
-**Checkpoint**: Foundation ready - user story implementation can now begin in parallel.
+**Checkpoint**: Foundation ready — user story implementation can now begin in parallel
 
 ---
 
-## Phase 3: User Story 1 - Evaluación Rápida del Perfil por Reclutadores / Hiring Managers (Priority: P1) 🎯 MVP
+## Phase 3: User Story 1 - Evaluación Rápida del Perfil por Reclutadores (Priority: P1) 🎯 MVP
 
-**Goal**: Permitir que un reclutador técnico o hiring manager determine en menos de 5 segundos la identidad, especialidad y propuesta de valor de Agustín Beltrame, descargue de inmediato su CV en PDF o inicie contacto directo.
+**Goal**: Hero above-the-fold con nombre, rol, propuesta de valor, avatar, badge de disponibilidad, CTA de descarga de CV y contacto directo (FR-001, FR-002, FR-007, FR-008)
 
-**Independent Test**: Cargar la aplicación en local, verificar que en el primer viewport (above the fold) se distingan nombre, rol, headline, avatar y badge de disponibilidad, hacer clic en "Download Resume / CV" descargando/abriendo `cv.pdf`, y pulsar el botón secundario de contacto navegando suavemente a `#contact`.
+**Independent Test**: Un usuario ingresa a la página, identifica en el primer pantallazo nombre/rol/propuesta de valor, descarga el CV con 1 clic e inicia contacto mediante acceso de correo directo (quickstart Escenarios 1-2)
+
+### Tests for User Story 1
+
+- [X] T012 [P] [US1] Render test for `HeroSection` in `tests/hero-section.test.tsx`: verifica `<h1>` con `profile.name`, `profile.role`, `profile.headline`, badge `availableForWork`, CTA con `href` igual a `profile.cvUrl` y `<img>` del avatar con `alt` descriptivo
+- [X] T013 [P] [US1] Behavior test for `EmailCopyButton` in `tests/email-copy-button.test.tsx`: mockea `navigator.clipboard.writeText`, verifica feedback visible tras clic, estado `role="status"` + `aria-live="polite"`, y retorno a normalidad tras 2.5s (SC-004)
 
 ### Implementation for User Story 1
 
-- [ ] T013 [P] [US1] Add professional avatar image and downloadable curriculum vitae document in public/avatar.webp and public/cv.pdf
-- [ ] T014 [US1] Implement HeroSection component displaying developer identity, role, headline, availability badge, and primary/secondary CTA buttons in src/components/HeroSection.tsx
-- [ ] T015 [US1] Integrate HeroSection into the main landing page shell in src/app/page.tsx
-- [ ] T016 [US1] Verify User Story 1 compilation and static build with npm run build in package.json
+- [X] T014 [P] [US1] Create `EmailCopyButton` in `src/components/EmailCopyButton.tsx`: `navigator.clipboard.writeText(emailAddress)` con fallback a `mailto:` si la API falla (edge case portapapeles), feedback visual temporal 2.5s con ícono `Copy`→`Check`, `aria-label="Copy email address to clipboard"`, `role="status"` + `aria-live="polite"` (FR-008, contrato 2.4)
+- [X] T015 [US1] Create `HeroSection` in `src/components/HeroSection.tsx` con props `{ profile: Profile; socialLinks: SocialLink[] }`: `<h1>` nombre, rol, headline, bio, ubicación, avatar, badge de disponibilidad, CTA primario "Download Resume / CV" (`target="_blank"` + `rel="noopener noreferrer"` hacia `profile.cvUrl`), CTA secundario "Contact Me" con smooth scroll a `#contact`, y acceso rápido de correo vía `EmailCopyButton` (FR-001, FR-002, FR-009, contrato 2.2)
+- [X] T016 [US1] Integrate `HeroSection` into `src/app/page.tsx` consumiendo `portfolioData.profile` y `portfolioData.socialLinks`
+- [X] T017 [US1] Run tests for US1: `npx vitest run tests/hero-section.test.tsx tests/email-copy-button.test.tsx`
 
-**Checkpoint**: At this point, User Story 1 should be fully functional and testable independently as an MVP.
+**Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
 ---
 
-## Phase 4: User Story 2 - Exploración Técnica y Validación de Proyectos por Colegas y Visitantes (Priority: P2)
+## Phase 4: User Story 2 - Exploración Técnica y Validación de Proyectos (Priority: P2)
 
-**Goal**: Permitir que un colega desarrollador o evaluador técnico audite la calidad de ingeniería explorando la galería de 3 a 6 proyectos destacados, analizando key features, tags y accediendo a código fuente o demo en vivo.
+**Goal**: Galería curada de 3-6 proyectos con metadatos completos y enlaces dinámicos condicionales seguros (FR-003, FR-004, FR-005, FR-006, FR-009)
 
-**Independent Test**: Navegar a la sección `#projects`, inspeccionar las tarjetas de proyectos con sus key features y tags, hacer clic en "Live Demo" y "Source Code" verificando apertura en nueva pestaña segura (`target="_blank"`, `rel="noopener noreferrer"`), y confirmar que proyectos sin demo omiten el botón preservando alineación y simetría.
+**Independent Test**: Un visitante explora las tarjetas, lee key features y tags, y hace clic en "Live Demo"/"Source Code" abriéndose en pestañas independientes seguras; en proyectos sin demo el botón se omite sin romper el grid (quickstart Escenario 3)
+
+### Tests for User Story 2
+
+- [X] T018 [P] [US2] Render test for `ProjectCard` in `tests/project-card.test.tsx`: verifica `title`, `description`, `keyFeatures` (viñetas), `tags`, y que ambos enlaces tienen `target="_blank"` y `rel="noopener noreferrer"` con `aria-label` correctos (SC-003)
+- [X] T019 [P] [US2] Conditional rendering test for `ProjectCard` in `tests/project-card.test.tsx`: con `demoUrl` ausente NO renderiza botón "Live Demo" pero sí "Source Code" y viceversa; sin espacios ni botones rotos (FR-006)
 
 ### Implementation for User Story 2
 
-- [ ] T017 [P] [US2] Implement ProjectCard component with conditional demo/repo actions, key features list, tags, and secure external links in src/components/ProjectCard.tsx
-- [ ] T018 [US2] Implement ProjectsGrid container component with responsive CSS grid layout (supporting 3 to 6 curated projects) in src/components/ProjectsGrid.tsx
-- [ ] T019 [US2] Integrate ProjectsGrid section into the main landing page assembly in src/app/page.tsx
-- [ ] T020 [US2] Verify User Story 2 compilation and type-check with npx tsc --noEmit in tsconfig.json
+- [X] T020 [P] [US2] Create `ProjectCard` in `src/components/ProjectCard.tsx` con props `{ project: Project }`: título, descripción, `keyFeatures` como lista, `tags` como badges, enlaces condicionales "Live Demo" (solo si `demoUrl` definido y no vacío) y "Source Code" (solo si `repoUrl` definido y no vacío), ambos `target="_blank"` + `rel="noopener noreferrer"` + `aria-label` descriptivos, grilla de acciones simétrica sin huecos (FR-004, FR-005, FR-006, contrato 2.3)
+- [X] T021 [P] [US2] Create `ProjectsGrid` in `src/components/ProjectsGrid.tsx` con props `{ projects: Project[] }`: sección `<section id="projects">` con encabezado, grid responsivo mobile-first (320px+), filtra `featured === true` y ordena por `order`, renderiza `ProjectCard[]` (FR-003, FR-012)
+- [X] T022 [US2] Integrate `ProjectsGrid` into `src/app/page.tsx` consumiendo `portfolioData.projects`
+- [X] T023 [US2] Run tests for US2: `npx vitest run tests/project-card.test.tsx`
 
-**Checkpoint**: At this point, User Stories 1 AND 2 should both work independently.
+**Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
 ---
 
-## Phase 5: User Story 3 - Navegación Accesible, Presencia Social y Personalización de Tema Visual (Priority: P3)
+## Phase 5: User Story 3 - Navegación Accesible, Presencia Social y Tema Visual (Priority: P3)
 
-**Goal**: Proveer alternador de tema claro/oscuro persistente y sin FOUC, barra de navegación superior fija con smooth-scroll, canales de contacto profesionales y botón de copiado rápido de email con confirmación visual y feedback ARIA.
+**Goal**: Navbar con smooth scroll, toggle de tema persistente sin FOUC, canales sociales con seguridad, copiado de correo con feedback y footer (FR-007, FR-008, FR-009, FR-010, FR-011, FR-013)
 
-**Independent Test**: Conmutar el interruptor de tema verificando cambio instantáneo y persistencia en `localStorage` ('portfolio-theme') sin FOUC; recorrer la interfaz con teclado (`Tab`) verificando foco visible WCAG 2.1 AA; pulsar el botón de copiado de email confirmando copiado al portapapeles y feedback visual ("Copied!") durante 2.5 segundos con anuncio en lector de pantalla (`aria-live="polite"`).
+**Independent Test**: Un usuario alterna el tema y verifica cambio instantáneo persistente en recargas; navega con Tab por todas las secciones y enlaces sociales con foco visible; copia el email y ve el feedback transitorio (quickstart Escenarios 4-6)
+
+### Tests for User Story 3
+
+- [X] T024 [P] [US3] Behavior test for `ThemeToggle` in `tests/theme-toggle.test.tsx`: verifica `aria-label="Toggle visual theme"`, `role="button"`, y que al hacer clic invoca el cambio de tema de `next-themes` (SC-006)
+- [X] T025 [P] [US3] Render test for `Header` in `tests/header.test.tsx`: verifica enlaces de anclaje `#about`, `#projects`, `#contact` con clase de smooth scroll y presencia de `ThemeToggle` (FR-011)
 
 ### Implementation for User Story 3
 
-- [ ] T021 [P] [US3] Implement ThemeToggle client component with light/dark switching, system preference detection, and accessible ARIA attributes in src/components/ThemeToggle.tsx
-- [ ] T022 [US3] Implement Header navigation component with sticky positioning, smooth-scroll anchor links, and ThemeToggle integration in src/components/Header.tsx
-- [ ] T023 [P] [US3] Implement EmailCopyButton client component with navigator.clipboard API, mailto fallback, 2.5s visual feedback, and ARIA live region in src/components/EmailCopyButton.tsx
-- [ ] T024 [US3] Implement ContactSection component rendering direct social channels and EmailCopyButton in src/components/ContactSection.tsx
-- [ ] T025 [P] [US3] Implement Footer component displaying copyright information, dynamic year, and developer credits in src/components/Footer.tsx
-- [ ] T026 [US3] Integrate Header, ContactSection, and Footer components into the main landing page assembly in src/app/page.tsx
-- [ ] T027 [US3] Verify User Story 3 compilation and full static build with npm run build in package.json
+- [X] T026 [P] [US3] Create `ThemeToggle` in `src/components/ThemeToggle.tsx`: alterna `light`/`dark` vía `next-themes`, íconos `lucide-react` (`Sun`/`Moon`), `aria-label="Toggle visual theme"`, `role="button"`, foco visible `focus-visible:ring-2` (FR-010, FR-013, contrato 2.1)
+- [X] T027 [US3] Create `Header` in `src/components/Header.tsx` con props `{ developerName: string }`: barra sticky, enlaces de anclaje smooth-scroll a `#about`, `#projects`, `#contact`, `ThemeToggle`, operable por teclado con indicador de foco visible (FR-011, FR-013, contrato 2.1)
+- [X] T028 [P] [US3] Create `ContactSection` in `src/components/ContactSection.tsx` con props `{ socialLinks: SocialLink[]; emailAddress: string }`: sección `<section id="contact">`, barra de redes (LinkedIn, GitHub, X/Twitter, Email) con íconos `lucide-react`, todos los enlaces externos `target="_blank"` + `rel="noopener noreferrer"` + `label` accesible, y `EmailCopyButton` para el canal de correo (FR-007, FR-008, FR-009, contrato 2.4)
+- [X] T029 [P] [US3] Create `Footer` in `src/components/Footer.tsx` con props `{ developerName: string; year?: number }`: copyright, créditos técnicos, marcado semántico `<footer>` (contrato 2.5)
+- [X] T030 [US3] Integrate `Header` (en `src/app/layout.tsx`), `ContactSection` y `Footer` into `src/app/page.tsx` consumiendo `portfolioData`
+- [X] T031 [US3] Run tests for US3: `npx vitest run tests/theme-toggle.test.tsx tests/header.test.tsx`
 
-**Checkpoint**: All user stories should now be independently functional.
+**Checkpoint**: All user stories should now be independently functional
 
 ---
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-**Purpose**: Auditoría final de accesibilidad, validación de enlaces externos, optimizaciones de performance y verificación de exportación estática.
+**Purpose**: Mejoras transversales, quality gates y validación end-to-end
 
-- [ ] T028 [P] Audit WCAG 2.1 AA accessibility, keyboard focus-visible rings, and color contrast across all UI components in src/components/
-- [ ] T029 [P] Update project documentation with architecture summary, quickstart instructions, and build scripts in README.md
-- [ ] T030 Execute end-to-end static export build and validation per quickstart.md in package.json
+- [X] T032 [P] A11y audit pass across `src/components/*` and `src/app/*`: marcado HTML5 semántico, `focus-visible` en todos los controles, nombres accesibles, contraste WCAG 2.1 AA (FR-013, SC-005, Constitución IV)
+- [ ] T033 [P] Responsive audit pass 320px → desktop en `src/app/globals.css` y componentes: wrapping de textos extensos sin truncar, sin overflow horizontal (FR-012, edge cases)
+- [X] T034 [P] Performance pass: textos críticos legibles antes de imágenes (`priority` en avatar, `next/image` o `<img>` optimizado), metadatos OG/Twitter completos desde `portfolioData.meta` (SC-007, Constitución V)
+- [X] T035 Run quality gates: `npm run typecheck` && `npm run lint` && `npm run build` — salida `out/` 100% estática (CI parity)
+- [X] T036 Run full test suite: `npx vitest run`
+- [ ] T037 Execute `quickstart.md` validation scenarios 1-6 end-to-end against `npm run dev` and record results
 
 ---
 
@@ -115,45 +136,47 @@
 
 ### Phase Dependencies
 
-- **Setup (Phase 1)**: No dependencies - can start immediately.
-- **Foundational (Phase 2)**: Depends on Setup completion (T001-T006) - BLOCKS all user stories.
-- **User Stories (Phase 3+)**: All depend on Foundational phase completion (T007-T012).
-  - User Story 1 (P1): Can start immediately after Phase 2 (MVP).
-  - User Story 2 (P2): Can start after Phase 2; integrates into `src/app/page.tsx` independently.
-  - User Story 3 (P3): Can start after Phase 2; integrates into `src/app/page.tsx` independently.
-- **Polish (Phase 6)**: Depends on completion of all user stories (T013-T027).
+- **Setup (Phase 1)**: No dependencies — can start immediately
+- **Foundational (Phase 2)**: Depends on Setup completion — BLOCKS all user stories (T006 → T007; T008-T011 paralelos tras T006)
+- **User Story 1 (Phase 3)**: Depends on Foundational — MVP scope
+- **User Story 2 (Phase 4)**: Depends on Foundational — independent of US1
+- **User Story 3 (Phase 5)**: Depends on Foundational — independent; `ContactSection` reutiliza `EmailCopyButton` de US1 (reimplementado en Fase 3, solo import — no bloquea)
+- **Polish (Phase 6)**: Depends on all desired user stories being complete
 
 ### User Story Dependencies
 
-- **User Story 1 (P1)**: Independent of US2 and US3. Delivers the core professional identity, CV download, and immediate conversion.
-- **User Story 2 (P2)**: Independent of US1 and US3. Consumes `Project` contract and renders project grid without depending on Hero or Contact components.
-- **User Story 3 (P3)**: Integrates Header, ThemeToggle, ContactSection, and Footer. Operates independently on base data from Phase 2.
+- **User Story 1 (P1)**: Can start after Foundational (Phase 2) - No dependencies on other stories
+- **User Story 2 (P2)**: Can start after Foundational (Phase 2) - No dependencies on other stories
+- **User Story 3 (P3)**: Can start after Foundational (Phase 2) - No dependencies on other stories
 
 ### Within Each User Story
 
-- Assets and leaf components first.
-- Container/section components next.
-- Page assembly integration.
-- Verification and type-check checkpoint (`npm run build` or `npx tsc --noEmit`).
+- Tests written before their implementation tasks (T012-T013 antes de T014-T016, etc.)
+- Independent components [P] before integration tasks
+- Story complete before moving to next priority (or run in parallel)
 
 ### Parallel Opportunities
 
-- **Phase 1 (Setup)**: T003, T004, and T005 can be executed in parallel.
-- **Phase 2 (Foundational)**: T007 and T008 can be executed in parallel.
-- **Phase 3 (User Story 1)**: T013 can be executed in parallel with component scaffolding.
-- **Phase 4 (User Story 2)**: T017 can be developed in parallel before T018 container.
-- **Phase 5 (User Story 3)**: T021, T023, and T025 can all be implemented in parallel across different files.
-- **Phase 6 (Polish)**: T028 and T029 can be executed in parallel.
+- Phase 1: T002, T003, T004, T005 en paralelo (archivos distintos)
+- Phase 2: T008, T011 en paralelo
+- Phase 3: T012, T013 (tests) en paralelo; T014 en paralelo con los tests
+- Phase 4: T018, T019 en paralelo; T020, T021 en paralelo
+- Phase 5: T024, T025 en paralelo; T026, T028, T029 en paralelo
+- Phase 6: T032, T033, T034 en paralelo
+- Entre user stories: Fases 3, 4 y 5 son independientes entre sí
 
 ---
 
-## Parallel Example: User Story 3
+## Parallel Example: User Story 2
 
 ```bash
-# Launch independent UI components for User Story 3 in parallel:
-Task: "Implement ThemeToggle client component in src/components/ThemeToggle.tsx"
-Task: "Implement EmailCopyButton client component in src/components/EmailCopyButton.tsx"
-Task: "Implement Footer component in src/components/Footer.tsx"
+# Launch tests together:
+Task: "Render test for ProjectCard in tests/project-card.test.tsx"
+Task: "Conditional rendering test for ProjectCard in tests/project-card.test.tsx"
+
+# Launch components together (different files):
+Task: "Create ProjectCard in src/components/ProjectCard.tsx"
+Task: "Create ProjectsGrid in src/components/ProjectsGrid.tsx"
 ```
 
 ---
@@ -162,15 +185,24 @@ Task: "Implement Footer component in src/components/Footer.tsx"
 
 ### MVP First (User Story 1 Only)
 
-1. Complete Phase 1: Setup (`T001` - `T006`).
-2. Complete Phase 2: Foundational (`T007` - `T012`) -> **Foundation Ready**.
-3. Complete Phase 3: User Story 1 (`T013` - `T016`).
-4. **STOP and VALIDATE**: Verify User Story 1 independently in browser: Developer identity visible in <5s, CV download operative, contact CTA responsive.
-5. Deploy/Demo initial MVP increment.
+1. Complete Phase 1: Setup
+2. Complete Phase 2: Foundational (CRITICAL - blocks all stories)
+3. Complete Phase 3: User Story 1
+4. **STOP and VALIDATE**: quickstart Escenarios 1, 2, 4 y 6
+5. Deploy/demo if ready
 
 ### Incremental Delivery
 
-1. **Increment 1 (MVP)**: Setup + Foundation + US1 (Hero, CV download, bio).
-2. **Increment 2**: US2 (Featured Projects showcase, key features, tags, demo/repo links).
-3. **Increment 3**: US3 (Dark/Light theme toggle, navigation header, contact section, email copy with feedback, footer).
-4. **Increment 4**: Polish & Cross-Cutting (WCAG 2.1 AA audit, README docs, static export verification).
+1. Complete Setup + Foundational → Foundation ready
+2. Add User Story 1 → Test independently → Deploy/Demo (MVP!)
+3. Add User Story 2 → Test independently → Deploy/Demo
+4. Add User Story 3 → Test independently → Deploy/Demo
+5. Polish → Quality gates (CI parity) → quickstart completo
+
+### Notes
+
+- [P] tasks = different files, no dependencies
+- [Story] label maps task to specific user story for traceability
+- Commit after each phase or logical group
+- All user-visible content in English (FR-015)
+- Data content in T007 and assets in T011 are provided by the user before Phase 2 completion

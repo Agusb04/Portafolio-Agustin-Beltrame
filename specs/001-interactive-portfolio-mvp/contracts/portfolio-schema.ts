@@ -12,6 +12,14 @@ export interface Profile {
   avatarUrl: string;
   cvUrl: string;
   availableForWork: boolean;
+  languages?: string[];
+  coreTechnologies?: string[];
+}
+
+export interface ProjectLink {
+  label: string;
+  url: string;
+  icon?: "Github" | "ExternalLink";
 }
 
 export interface Project {
@@ -22,6 +30,7 @@ export interface Project {
   tags: string[];
   repoUrl?: string;
   demoUrl?: string;
+  extraLinks?: ProjectLink[];
   featured: boolean;
   order: number;
 }
