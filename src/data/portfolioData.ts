@@ -10,10 +10,10 @@ import type { PortfolioData } from "@/types/portfolio";
 export const portfolioData: PortfolioData = {
   profile: {
     name: "Agustín Beltrame",
-    role: "Computer Engineering Student / Software Developer",
+    role: "Computer Engineering Student | Software Developer",
     headline:
-      "Computer Engineering Student at UBA (FIUBA) | Backend Development | Systems Programming | Software Architecture",
-    bio: "I'm a Computer Engineering student at the University of Buenos Aires (UBA/FIUBA), interested in software engineering, systems programming, and software architecture. I enjoy building maintainable and scalable solutions, working with algorithms, backend development, and databases.",
+      "Computer Engineering student at UBA (FIUBA) interested in backend development, systems programming, and software design.",
+    bio: "I enjoy solving complex problems, understanding how systems work under the hood, and building reliable, maintainable software. I'm also exploring AI-assisted development and Spec-Driven Development to improve my engineering workflow.",
     location: "Buenos Aires, Argentina",
     avatarUrl: "/avatar.webp",
     cvUrl: "/cv.pdf",
