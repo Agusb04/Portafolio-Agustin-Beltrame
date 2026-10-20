@@ -16,7 +16,7 @@ export function EducationSection({ education }: EducationSectionProps) {
     <section
       id="education"
       aria-label={t.education.title}
-      className="mx-auto max-w-6xl px-4 py-16 sm:py-24"
+      className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 sm:py-24"
     >
       <div className="flex flex-col gap-3">
         <h2 className="text-3xl font-bold tracking-tight">

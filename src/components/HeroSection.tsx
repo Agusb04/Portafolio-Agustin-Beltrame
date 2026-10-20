@@ -32,7 +32,7 @@ export function HeroSection({ profile }: HeroSectionProps) {
     <section
       id="about"
       aria-label="Introduction"
-      className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-16 sm:py-24 md:flex-row md:items-center md:justify-between"
+      className="mx-auto flex min-h-[calc(100svh-6rem)] max-w-6xl scroll-mt-24 flex-col justify-center gap-10 px-4 py-16 sm:min-h-[calc(100svh-4rem)] sm:py-24 md:flex-row md:items-center md:justify-between"
     >
       <div className="flex flex-col gap-5">
         {availableForWork && (
