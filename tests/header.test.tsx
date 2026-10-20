@@ -1,13 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { Header } from "@/components/Header";
+import { LanguageProvider } from "@/providers/LanguageProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 
 function renderHeader() {
   return render(
-    <ThemeProvider>
-      <Header developerName="Agustín Beltrame" />
-    </ThemeProvider>,
+    <LanguageProvider>
+      <ThemeProvider>
+        <Header developerName="Agustín Beltrame" />
+      </ThemeProvider>
+    </LanguageProvider>,
   );
 }
 
@@ -26,13 +29,16 @@ describe("Header", () => {
     const mainNav = screen.getByRole("navigation", { name: "Main navigation" });
     expect(mainNav).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "About" }),
+      screen.getByRole("link", { name: "Sobre mí" }),
     ).toHaveAttribute("href", "#about");
     expect(
-      screen.getByRole("link", { name: "Projects" }),
+      screen.getByRole("link", { name: "Proyectos" }),
     ).toHaveAttribute("href", "#projects");
     expect(
-      screen.getByRole("link", { name: "Contact" }),
+      screen.getByRole("link", { name: "Educación" }),
+    ).toHaveAttribute("href", "#education");
+    expect(
+      screen.getByRole("link", { name: "Contacto" }),
     ).toHaveAttribute("href", "#contact");
   });
 
@@ -41,6 +47,14 @@ describe("Header", () => {
 
     expect(
       await screen.findByRole("button", { name: "Toggle visual theme" }),
+    ).toBeInTheDocument();
+  });
+
+  it("includes the language toggle control", async () => {
+    renderHeader();
+
+    expect(
+      await screen.findByRole("button", { name: "Cambiar idioma" }),
     ).toBeInTheDocument();
   });
 });
