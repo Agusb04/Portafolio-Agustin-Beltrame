@@ -1,5 +1,9 @@
+"use client";
+
 import { EmailCopyButton } from "@/components/EmailCopyButton";
 import { getSocialIcon } from "@/components/social-icons";
+import { useLanguage } from "@/hooks/useLanguage";
+import { useTranslation } from "@/hooks/useTranslation";
 import type { SocialLink } from "@/types/portfolio";
 
 export interface ContactSectionProps {
@@ -11,6 +15,8 @@ export function ContactSection({
   socialLinks,
   emailAddress,
 }: ContactSectionProps) {
+  const { locale } = useLanguage();
+  const { t } = useTranslation();
   const externalLinks = socialLinks.filter((link) => !link.isEmail);
 
   return (
@@ -20,10 +26,9 @@ export function ContactSection({
       className="mx-auto max-w-6xl px-4 py-16 sm:py-24"
     >
       <div className="flex flex-col gap-3">
-        <h2 className="text-3xl font-bold tracking-tight">Get in Touch</h2>
+        <h2 className="text-3xl font-bold tracking-tight">{t.contact.title}</h2>
         <p className="max-w-2xl text-muted-foreground">
-          Open to new opportunities and interesting collaborations — reach out
-          directly.
+          {t.contact.subtitle}
         </p>
       </div>
 
@@ -40,7 +45,7 @@ export function ContactSection({
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={link.label}
+                    aria-label={link.label[locale]}
                     className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:border-primary hover:shadow-md"
                   >
                     <Icon aria-hidden="true" className="h-5 w-5" />

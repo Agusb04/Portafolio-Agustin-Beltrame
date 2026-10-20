@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import { Download, MapPin } from "lucide-react";
+import { useLanguage } from "@/hooks/useLanguage";
+import { useTranslation } from "@/hooks/useTranslation";
 import { asset } from "@/lib/assets";
 import type { Profile } from "@/types/portfolio";
 
@@ -8,6 +12,8 @@ export interface HeroSectionProps {
 }
 
 export function HeroSection({ profile }: HeroSectionProps) {
+  const { locale } = useLanguage();
+  const { t } = useTranslation();
   const {
     name,
     role,
@@ -20,6 +26,7 @@ export function HeroSection({ profile }: HeroSectionProps) {
     languages,
     coreTechnologies,
   } = profile;
+  const localizedLanguages = languages?.[locale];
 
   return (
     <section
@@ -34,7 +41,7 @@ export function HeroSection({ profile }: HeroSectionProps) {
               aria-hidden="true"
               className="h-2 w-2 rounded-full bg-green-500 motion-safe:animate-pulse"
             />
-            Available for work
+            {t.hero.availableForWork}
           </p>
         )}
 
@@ -42,14 +49,16 @@ export function HeroSection({ profile }: HeroSectionProps) {
           {name}
         </h1>
 
-        <p className="text-lg font-semibold text-primary break-words">{role}</p>
+        <p className="text-lg font-semibold text-primary break-words">
+          {role[locale]}
+        </p>
 
         <p className="max-w-2xl text-balance text-xl text-muted-foreground">
-          {headline}
+          {headline[locale]}
         </p>
 
         <p className="max-w-2xl text-balance text-sm leading-relaxed text-muted-foreground sm:text-base">
-          {bio}
+          {bio[locale]}
         </p>
 
         <p className="inline-flex items-center gap-2 text-sm text-muted-foreground">
@@ -57,18 +66,17 @@ export function HeroSection({ profile }: HeroSectionProps) {
           {location}
         </p>
 
-        {languages && languages.length > 0 && (
+        {localizedLanguages && localizedLanguages.length > 0 && (
           <p className="text-sm text-muted-foreground break-words">
-            <span className="font-medium text-foreground">Languages:</span>{" "}
-            {languages.join(" · ")}
+            <span className="font-medium text-foreground">
+              {t.hero.languages}
+            </span>{" "}
+            {localizedLanguages.join(" · ")}
           </p>
         )}
 
         {coreTechnologies && coreTechnologies.length > 0 && (
-          <ul
-            aria-label="Core technologies"
-            className="flex flex-wrap gap-2"
-          >
+          <ul aria-label="Core technologies" className="flex flex-wrap gap-2">
             {coreTechnologies.map((technology) => (
               <li
                 key={technology}
@@ -89,13 +97,13 @@ export function HeroSection({ profile }: HeroSectionProps) {
             className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:shadow-lg"
           >
             <Download aria-hidden="true" className="h-4 w-4" />
-            Download Resume / CV
+            {t.hero.downloadResume}
           </a>
           <a
             href="#contact"
             className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:border-primary hover:shadow-lg"
           >
-            Contact Me
+            {t.hero.contactMe}
           </a>
         </div>
       </div>

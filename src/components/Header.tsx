@@ -1,16 +1,23 @@
+"use client";
+
+import { LanguageToggle } from "@/components/LanguageToggle";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export interface HeaderProps {
   developerName: string;
 }
 
-const navLinks = [
-  { href: "#about", label: "About" },
-  { href: "#projects", label: "Projects" },
-  { href: "#contact", label: "Contact" },
-] as const;
-
 export function Header({ developerName }: HeaderProps) {
+  const { t } = useTranslation();
+
+  const navLinks = [
+    { href: "#about", label: t.nav.about },
+    { href: "#projects", label: t.nav.projects },
+    { href: "#education", label: t.nav.education },
+    { href: "#contact", label: t.nav.contact },
+  ];
+
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3">
@@ -36,7 +43,10 @@ export function Header({ developerName }: HeaderProps) {
           ))}
         </nav>
 
-        <ThemeToggle />
+        <div className="flex items-center gap-2">
+          <LanguageToggle />
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

@@ -1,5 +1,9 @@
+"use client";
+
 import { ExternalLink } from "lucide-react";
 import { GithubIcon } from "@/components/social-icons";
+import { useLanguage } from "@/hooks/useLanguage";
+import { useTranslation } from "@/hooks/useTranslation";
 import type { Project } from "@/types/portfolio";
 
 export interface ProjectCardProps {
@@ -7,21 +11,24 @@ export interface ProjectCardProps {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const { locale } = useLanguage();
+  const { t } = useTranslation();
   const { title, description, keyFeatures, tags, repoUrl, demoUrl, extraLinks } =
     project;
+  const localizedTitle = title[locale];
   const hasDemo = Boolean(demoUrl && demoUrl.trim().length > 0);
   const hasRepo = Boolean(repoUrl && repoUrl.trim().length > 0);
 
   return (
     <article className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg">
-      <h3 className="text-lg font-semibold break-words">{title}</h3>
+      <h3 className="text-lg font-semibold break-words">{localizedTitle}</h3>
 
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground break-words">
-        {description}
+        {description[locale]}
       </p>
 
       <ul className="mt-4 flex flex-col gap-2">
-        {keyFeatures.map((feature) => (
+        {keyFeatures[locale].map((feature) => (
           <li
             key={feature}
             className="flex items-start gap-2 text-sm break-words"
@@ -36,7 +43,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       </ul>
 
       <ul
-        aria-label={`Technologies used in ${title}`}
+        aria-label={`Technologies used in ${localizedTitle}`}
         className="mt-4 flex flex-wrap gap-2"
       >
         {tags.map((tag) => (
@@ -55,11 +62,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
             href={demoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`View live demo for ${title}`}
+            aria-label={`View live demo for ${localizedTitle}`}
             className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:shadow-md"
           >
             <ExternalLink aria-hidden="true" className="h-4 w-4" />
-            Live Demo
+            {t.projects.liveDemo}
           </a>
         )}
         {hasRepo && (
@@ -67,11 +74,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
             href={repoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`View source code repository for ${title}`}
+            aria-label={`View source code repository for ${localizedTitle}`}
             className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-foreground transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:border-primary hover:shadow-md"
           >
             <GithubIcon className="h-4 w-4" />
-            Source Code
+            {t.projects.viewRepo}
           </a>
         )}
         {extraLinks?.map((link) => {
@@ -83,11 +90,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`View ${link.label} for ${title}`}
+              aria-label={`View ${link.label[locale]} for ${localizedTitle}`}
               className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-foreground transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:border-primary hover:shadow-md"
             >
               <LinkIconComponent className="h-4 w-4" />
-              {link.label}
+              {link.label[locale]}
             </a>
           );
         })}

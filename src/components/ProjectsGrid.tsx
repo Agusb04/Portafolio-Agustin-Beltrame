@@ -1,4 +1,7 @@
+"use client";
+
 import { ProjectCard } from "@/components/ProjectCard";
+import { useTranslation } from "@/hooks/useTranslation";
 import type { Project } from "@/types/portfolio";
 
 export interface ProjectsGridProps {
@@ -6,6 +9,8 @@ export interface ProjectsGridProps {
 }
 
 export function ProjectsGrid({ projects }: ProjectsGridProps) {
+  const { t } = useTranslation();
+
   const featuredProjects = projects
     .filter((project) => project.featured)
     .sort((a, b) => a.order - b.order);
@@ -17,10 +22,11 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
       className="mx-auto max-w-6xl px-4 py-16 sm:py-24"
     >
       <div className="flex flex-col gap-3">
-        <h2 className="text-3xl font-bold tracking-tight">Featured Projects</h2>
+        <h2 className="text-3xl font-bold tracking-tight">
+          {t.projects.title}
+        </h2>
         <p className="max-w-2xl text-muted-foreground">
-          A curated selection of key work — problem, solution, highlights and
-          stack.
+          {t.projects.subtitle}
         </p>
       </div>
 

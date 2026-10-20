@@ -2,12 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Check, Copy } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export interface EmailCopyButtonProps {
   emailAddress: string;
 }
 
 export function EmailCopyButton({ emailAddress }: EmailCopyButtonProps) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const [failed, setFailed] = useState(false);
   const timerRef = useRef<number | null>(null);
@@ -39,7 +41,7 @@ export function EmailCopyButton({ emailAddress }: EmailCopyButtonProps) {
       <button
         type="button"
         onClick={handleCopy}
-        aria-label="Copy email address to clipboard"
+        aria-label={t.contact.copyEmailAria}
         className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:border-primary hover:shadow-md"
       >
         {copied ? (
@@ -47,7 +49,7 @@ export function EmailCopyButton({ emailAddress }: EmailCopyButtonProps) {
         ) : (
           <Copy aria-hidden="true" className="h-4 w-4" />
         )}
-        <span>{copied ? "Copied!" : "Copy email"}</span>
+        <span>{copied ? t.contact.emailCopied : t.contact.copyEmail}</span>
       </button>
 
       <a
@@ -58,13 +60,12 @@ export function EmailCopyButton({ emailAddress }: EmailCopyButtonProps) {
       </a>
 
       <span role="status" aria-live="polite" className="sr-only">
-        {copied ? "Email copied to clipboard!" : ""}
+        {copied ? t.contact.emailCopiedStatus : ""}
       </span>
 
       {failed && (
         <p role="status" aria-live="polite" className="w-full text-sm text-muted-foreground">
-          Copying is blocked by your browser — select the address manually or use
-          the email link.
+          {t.contact.copyFailed}
         </p>
       )}
     </div>
