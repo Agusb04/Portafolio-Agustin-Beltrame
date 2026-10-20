@@ -150,6 +150,7 @@ export interface UITranslations {
   footer: {
     rights: string;
     builtWith: string;
+    navigation: string;
   };
   lang: {
     toggle: string;

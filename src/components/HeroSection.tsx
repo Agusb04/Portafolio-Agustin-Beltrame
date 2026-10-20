@@ -47,11 +47,10 @@ export function HeroSection({ profile }: HeroSectionProps) {
 
         <h1 className="text-4xl font-bold tracking-tight break-words sm:text-5xl">
           {name}
+          <span className="mt-2 block text-lg font-semibold text-primary break-words sm:text-xl">
+            {role[locale]}
+          </span>
         </h1>
-
-        <p className="text-lg font-semibold text-primary break-words">
-          {role[locale]}
-        </p>
 
         <p className="max-w-2xl text-balance text-xl text-muted-foreground">
           {headline[locale]}

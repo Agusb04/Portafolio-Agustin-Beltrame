@@ -41,7 +41,10 @@ describe("HeroSection", () => {
   it("renders the developer name as the main heading", () => {
     renderHero();
     expect(
-      screen.getByRole("heading", { level: 1, name: profile.name }),
+      screen.getByRole("heading", {
+        level: 1,
+        name: new RegExp(profile.name),
+      }),
     ).toBeInTheDocument();
   });
 

@@ -45,6 +45,7 @@ export const translations: Record<Locale, UITranslations> = {
     footer: {
       rights: "Todos los derechos reservados.",
       builtWith: "Hecho con Next.js, TypeScript & Tailwind CSS",
+      navigation: "Navegación del pie de página",
     },
     lang: {
       toggle: "Cambiar idioma",
@@ -93,6 +94,7 @@ export const translations: Record<Locale, UITranslations> = {
     footer: {
       rights: "All rights reserved.",
       builtWith: "Built with Next.js, TypeScript & Tailwind CSS",
+      navigation: "Footer navigation",
     },
     lang: {
       toggle: "Change language",

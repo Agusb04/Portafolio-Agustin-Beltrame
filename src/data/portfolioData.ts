@@ -17,8 +17,8 @@ export const portfolioData: PortfolioData = {
       en: "Computer Engineering student at UBA (FIUBA) interested in backend development, systems programming, and software design.",
     },
     bio: {
-      es: "Disfruto resolver problemas complejos, entender cómo funcionan los sistemas por dentro y construir software confiable y mantenible. También estoy explorando el desarrollo asistido por IA y el Desarrollo Guiado por Especificaciones para mejorar mi flujo de trabajo de ingeniería.",
-      en: "I enjoy solving complex problems, understanding how systems work under the hood, and building reliable, maintainable software. I'm also exploring AI-assisted development and Spec-Driven Development to improve my engineering workflow.",
+      es: "Disfruto resolver problemas complejos, entender cómo funcionan los sistemas por dentro y construir software confiable y mantenible. Me interesa especialmente el desarrollo backend, las estructuras de datos y los algoritmos, y busco diseñar soluciones eficientes y escalables. También estoy explorando el desarrollo asistido por IA y el Desarrollo Guiado por Especificaciones para mejorar mi flujo de trabajo de ingeniería. Me gusta aprender nuevas tecnologías mediante proyectos prácticos y aplicar buenas prácticas de testing, documentación y trabajo en equipo.",
+      en: "I enjoy solving complex problems, understanding how systems work under the hood, and building reliable, maintainable software. I'm particularly interested in backend development, data structures and algorithms, and I aim to design efficient and scalable solutions. I'm also exploring AI-assisted development and Spec-Driven Development to improve my engineering workflow. I like learning new technologies through hands-on projects and applying good testing, documentation and teamwork practices.",
     },
     location: "Buenos Aires, Argentina",
     avatarUrl: "/avatar.webp",
@@ -227,15 +227,15 @@ export const portfolioData: PortfolioData = {
     },
   ],
   meta: {
-    siteUrl: "https://agustinbeltrame.dev",
+    siteUrl: "https://agusb04.github.io/Portafolio-Agustin-Beltrame/",
     siteName: "Agustín Beltrame",
     defaultTitle: {
-      es: "Agustín Beltrame — Estudiante de Ingeniería Informática / Desarrollador de Software",
-      en: "Agustín Beltrame — Computer Engineering Student / Software Developer",
+      es: "Agustín Beltrame | Desarrollador de Software",
+      en: "Agustín Beltrame | Software Developer",
     },
     description: {
-      es: "Portafolio de Agustín Beltrame, estudiante de ingeniería informática en UBA y desarrollador de software enfocado en backend, programación de sistemas y arquitectura de software.",
-      en: "Portfolio of Agustín Beltrame, computer engineering student at UBA and software developer focused on backend, systems programming and software architecture.",
+      es: "Portafolio de Agustín Beltrame, estudiante de Ingeniería Informática en UBA y desarrollador backend enfocado en programación de sistemas.",
+      en: "Portfolio of Agustín Beltrame, computer engineering student at UBA and backend developer focused on systems programming.",
     },
     keywords: {
       es: [
@@ -258,7 +258,8 @@ export const portfolioData: PortfolioData = {
       ],
     },
     author: "Agustín Beltrame",
-    ogImage: "/og-image.png",
+    ogImage:
+      "https://agusb04.github.io/Portafolio-Agustin-Beltrame/og-image.png",
   },
   education: [
     {
@@ -275,8 +276,8 @@ export const portfolioData: PortfolioData = {
       endDate: null,
       status: "in-progress",
       description: {
-        es: "Formación universitaria en ciencias de la computación, sistemas, algoritmos y desarrollo de software.",
-        en: "University education in computer science, systems, algorithms and software development.",
+        es: "Formación universitaria en ciencias de la computación, sistemas operativos, algoritmos, estructuras de datos y desarrollo de software, con proyectos prácticos que aplican buenas prácticas de ingeniería y trabajo en equipo.",
+        en: "University education in computer science, operating systems, algorithms, data structures and software development, with hands-on projects that apply good engineering practices and teamwork.",
       },
       order: 1,
     },
@@ -294,8 +295,8 @@ export const portfolioData: PortfolioData = {
       endDate: "2022",
       status: "completed",
       description: {
-        es: "Aprobado con Grado B — CEFR B2 (puntaje 177).",
-        en: "Passed at Grade B — CEFR B2 (score 177).",
+        es: "Aprobado con Grado B — CEFR B2 (puntaje 177). Certificación internacional que acredita un nivel avanzado de inglés para contextos académicos y profesionales.",
+        en: "Passed at Grade B — CEFR B2 (score 177). International certification that proves an advanced level of English for academic and professional contexts.",
       },
       certifications: [
         {

@@ -28,6 +28,7 @@ export const metadata: Metadata = {
   description: defaultDescription,
   keywords: defaultKeywords,
   authors: [{ name: meta.author }],
+  alternates: { canonical: meta.siteUrl },
   openGraph: {
     type: "website",
     url: meta.siteUrl,
