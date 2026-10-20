@@ -2,45 +2,81 @@
 
 Portafolio personal interactivo de Agustín Beltrame — Computer Engineering Student (UBA/FIUBA) / Software Developer. Desarrollado con Spec-Driven Development (Spec Kit) para practicar manejo de Agentic IA y mostrar habilidades de ingeniería de software.
 
-**Especificación de referencia**: [`specs/001-interactive-portfolio-mvp/`](specs/001-interactive-portfolio-mvp/)
+**Especificaciones de referencia**:
+
+- [`specs/001-interactive-portfolio-mvp/`](specs/001-interactive-portfolio-mvp/) — MVP interactivo
+- [`specs/002-portfolio-enhancements/`](specs/002-portfolio-enhancements/) — i18n, educación y certificaciones
+
+## Funcionalidades
+
+- **Bilingüe (Español / English)**: selector en el header, cambio instantáneo sin recarga y preferencia persistida en `localStorage` (español por defecto).
+- **Dark mode persistente** sin FOUC.
+- **Diseño responsive** mobile-first con estética developer-first.
+- **Secciones data-driven**: perfil, proyectos destacados, educación y contacto.
+- **Certificaciones**: visor modal accesible con la imagen del certificado (foco atrapado, cierre con Escape, clic fuera o botón).
+- **Salida 100% estática** desplegable en GitHub Pages o cualquier CDN.
 
 ## Stack Tecnológico
 
 - **[Next.js 16](https://nextjs.org/)** (App Router) con generación de sitio estático (`output: 'export'` — sin backend en runtime)
 - **React 19** + **TypeScript** en modo estricto (`strict: true`)
 - **Tailwind CSS v4** (tokens de tema claro/oscuro vía variables CSS)
-- **[next-themes](https://github.com/pacocoursey/next-themes)** — dark mode persistente sin FOUC (Flash of Unstyled Content)
+- **[next-themes](https://github.com/pacocoursey/next-themes)** — dark mode persistente sin FOUC
 - **[lucide-react](https://lucide.dev/)** + SVGs de marca propios — iconografía
 - **Vitest** + **React Testing Library** — pruebas de componentes
+- **i18n propio** con React Context — sin librerías externas, solo dos idiomas
+
+## Internacionalización
+
+El sitio soporta **español (por defecto)** e **inglés** con cambio client-side:
+
+- `LanguageProvider` ([`src/providers/LanguageProvider.tsx`](src/providers/LanguageProvider.tsx)) expone el locale actual y lo persiste con la clave `portfolio-language`.
+- `useLanguage()` y `useTranslation()` ([`src/hooks/`](src/hooks/)) dan acceso al locale y a los textos de UI.
+- Los textos de interfaz viven en [`src/data/translations.ts`](src/data/translations.ts).
+- El contenido del portafolio usa el wrapper `Localized<T>` (`{ es: T, en: T }`).
+- El atributo `<html lang>` se actualiza automáticamente según el idioma activo.
 
 ## Arquitectura
 
 Arquitectura **data-driven**: todo el contenido editable está desacoplado de la presentación (Constitución II del proyecto).
 
-- **Fuente única de verdad**: [`src/data/portfolioData.ts`](src/data/portfolioData.ts) — perfil profesional, proyectos destacados, canales de contacto y metadatos SEO
-- **Contratos tipados**: [`src/types/portfolio.ts`](src/types/portfolio.ts) — `Profile`, `Project`, `SocialLink`, `SiteMeta`, `PortfolioData`
-- **Componentes de presentación**: [`src/components/`](src/components/) — consumen los datos de forma declarativa; cero textos hardcodeados en JSX
-- **Salida 100% estática**: `npm run build` genera HTML/CSS/JS en `out/`, desplegable en cualquier CDN o GitHub Pages
+- **Fuente única de verdad**: [`src/data/portfolioData.ts`](src/data/portfolioData.ts) — perfil, proyectos, educación, certificaciones, canales de contacto y metadatos SEO (todo localizado ES/EN).
+- **Contratos tipados**: [`src/types/portfolio.ts`](src/types/portfolio.ts) — `Locale`, `Localized<T>`, `Profile`, `Project`, `SocialLink`, `EducationEntry`, `Certification`, `SiteMeta`, `UITranslations` y `PortfolioData`.
+- **Componentes de presentación**: [`src/components/`](src/components/) — consumen los datos de forma declarativa; sin contenido hardcodeado en JSX.
+- **Salida 100% estática**: `npm run build` genera HTML/CSS/JS en `out/`, desplegable en cualquier CDN o GitHub Pages.
 
 ## Estructura del Proyecto
 
 ```text
 src/
-├── app/                  # App Router: layout (SEO/OG, ThemeProvider, Header), page, globals.css
-├── components/           # Header, ThemeToggle, HeroSection, ProjectsGrid, ProjectCard,
-│                         # ContactSection, EmailCopyButton, Footer, social-icons
+├── app/                      # App Router: layout (SEO/OG, providers, Header), page, globals.css
+├── components/               # Header, LanguageToggle, ThemeToggle, HeroSection,
+│                             # ProjectsGrid, ProjectCard, EducationSection,
+│                             # EducationCard, CertificateModal, ContactSection,
+│                             # EmailCopyButton, Footer, social-icons
 ├── data/
-│   └── portfolioData.ts  # ← Editá acá el contenido del portafolio
+│   ├── portfolioData.ts      # ← Editá acá el contenido del portafolio
+│   └── translations.ts       # ← Textos de interfaz en ES/EN
+├── hooks/
+│   ├── useLanguage.ts        # Acceso al locale y setter
+│   ├── useTranslation.ts     # Textos de UI según el locale
+│   └── useMounted.ts         # Render client-only (evita mismatches de hidratación)
 ├── lib/
-│   └── contact.ts        # Helpers de resolución de email
+│   ├── assets.ts             # Prefijo basePath para assets de public/
+│   └── contact.ts            # Helper de resolución de email
 ├── providers/
-│   └── ThemeProvider.tsx # Wrapper de next-themes (dark/light)
+│   ├── LanguageProvider.tsx  # Contexto i18n + persistencia
+│   └── ThemeProvider.tsx     # Wrapper de next-themes
 └── types/
-    └── portfolio.ts      # Contratos TypeScript
+    └── portfolio.ts          # Contratos TypeScript
 
-public/                   # cv.pdf, avatar.webp, og-image.png (estáticos)
-tests/                    # Vitest + RTL (28 tests)
-specs/                    # Especificación SDD de la feature 001
+public/
+├── avatar.webp
+├── cv.pdf
+├── og-image.png
+└── certifications/           # Imágenes de certificaciones (+ PDF original opcional)
+tests/                        # Vitest + RTL (30 tests)
+specs/                        # Especificaciones SDD de las features 001 y 002
 ```
 
 ## Puesta en Marcha
@@ -65,64 +101,46 @@ npm run dev        # servidor de desarrollo → http://localhost:3000
 
 ## Cómo Actualizar el Contenido
 
-Todo el contenido visible del sitio se edita en **un solo archivo**: [`src/data/portfolioData.ts`](src/data/portfolioData.ts).
+Todo el contenido visible del sitio se edita en **dos archivos**:
 
-1. **Perfil**: nombre, rol, headline, bio, ubicación, `languages`, `coreTechnologies`, `availableForWork`
-2. **Proyectos**: entre 3 y 6 con `featured: true`; cada uno con `keyFeatures` (2-4), `tags` (2-8), al menos un `repoUrl` o `demoUrl`; ordenar con `order`
-3. **Redes**: agregar/quitar entradas en `socialLinks` (el ícono se resuelve por el campo `icon` en `src/components/social-icons.tsx`)
+- [`src/data/portfolioData.ts`](src/data/portfolioData.ts) — contenido del portafolio
+- [`src/data/translations.ts`](src/data/translations.ts) — textos de la interfaz
 
-Todo el contenido visible debe redactarse **en inglés** (FR-015 de la spec) para alcance global con reclutadores. La compilación valida los contratos: si falta un campo requerido, `npm run typecheck` falla antes de llegar a producción.
+> Los campos localizados usan la forma `{ es: "...", en: "..." }`. Completá **ambos idiomas**; `npm run typecheck` valida que no falte ninguno.
+
+1. **Perfil**: nombre, `role`, `headline`, `bio`, ubicación, `languages`, `coreTechnologies`, `availableForWork` y metadatos SEO.
+2. **Proyectos**: entre 3 y 6 con `featured: true`; cada uno con `keyFeatures` (2-4), `tags` (2-8) y al menos un `repoUrl` o `demoUrl`. Ordenalos con `order`.
+3. **Educación**: agregá entradas en `education[]` con `institution`, `degree`, `startDate`, `endDate` (`null` si está en curso), `status` (`"in-progress"` | `"completed"`) y `order`.
+4. **Certificaciones**: dentro de una entrada educativa, agregá objetos en `certifications[]` con `name`, `issuer`, `date` e `imageUrl`. Si `imageUrl` es `null`, no se muestra el botón "Ver Certificación".
+5. **Redes**: agregá o quitá entradas en `socialLinks` (el ícono se resuelve por `icon` en [`src/components/social-icons.tsx`](src/components/social-icons.tsx)).
+6. **Textos de UI**: títulos de secciones, botones, estados y labels en [`src/data/translations.ts`](src/data/translations.ts).
+
+Las imágenes de certificaciones se guardan en `public/certifications/` y conviene usar **WebP** para optimizar la carga. El visor muestra la imagen en un modal ampliado.
+
+## Accesibilidad
+
+- El visor de certificaciones usa `role="dialog"`, `aria-modal` y `aria-labelledby`, con trampa de foco y restauración del foco al cerrar.
+- Se puede cerrar con el botón de cierre, con Escape o haciendo clic fuera del modal.
+- El cambio de idioma actualiza `<html lang>` para lectores de pantalla y SEO.
 
 ## Quality Gates
 
-Antes de cada PR, la CI (`.github/workflows/ci.yml`) y el flujo local deben pasar:
+Antes de cada PR, ejecutá localmente:
 
 ```bash
 npm run typecheck && npm run lint && npm test && npm run build
 ```
 
+La CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) ejecuta type check, lint y build; además existe un workflow de despliegue ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)).
+
 ## Despliegue (GitHub Pages)
 
 La build es 100% estática (`out/`). Para publicar en GitHub Pages:
 
-1. En el repo: **Settings → Pages → Source: GitHub Actions**
-2. Workflow de ejemplo (`.github/workflows/deploy.yml`):
+1. En el repo: **Settings → Pages → Source: GitHub Actions**.
+2. El workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) compila y publica `out/`.
 
-```yaml
-name: Deploy to GitHub Pages
-on:
-  push:
-    branches: [main]
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-concurrency:
-  group: pages
-  cancel-in-progress: true
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 20, cache: npm }
-      - run: npm ci
-      - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
-        with: { path: out }
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
-```
-
-> **Nota**: al usar rutas relativas, el sitio funciona bajo el prefijo de proyecto de GitHub Pages (`https://<usuario>.github.io/<repo>/`) sin configuración extra.
+El build usa `NEXT_PUBLIC_BASE_PATH` para servir el sitio bajo el prefijo del repositorio (`https://<usuario>.github.io/Portafolio-Agustin-Beltrame/`). Ese valor se pasa tanto a `basePath` de Next.js como al helper `asset()` que resuelve las imágenes y el CV de `public/`.
 
 ## Licencia
 
