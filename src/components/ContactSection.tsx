@@ -23,7 +23,7 @@ export function ContactSection({
     <section
       id="contact"
       aria-label="Contact"
-      className="mx-auto max-w-6xl px-4 py-16 sm:py-24"
+      className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 sm:py-24"
     >
       <div className="flex flex-col gap-3">
         <h2 className="text-3xl font-bold tracking-tight">{t.contact.title}</h2>
